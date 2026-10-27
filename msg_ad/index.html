@@ -1069,10 +1069,9 @@ button.go{border:0;cursor:pointer;font-family:inherit}
 #ideas{border-style:none!important}
 #ideas *{border-style:none!important}
 #ideas *::before,#ideas *::after{border-style:none!important}
-#ideas .teaser,#ideas .pr-act,#ideas .cp-row,#ideas .mp-st.cur i{border-style:dashed!important}
 #ideas .sp-pin{border-style:solid!important}
-#ideas *:not(.newmark){outline:none!important}
-#ideas *:focus-visible{outline:2px dashed var(--new)!important;outline-offset:2px}
+#ideas,#ideas *,#ideas .newmark{outline:none!important}
+#ideas *:focus-visible{outline:none!important;box-shadow:0 0 0 3px rgba(43,95,217,.35)!important}
 #ideas .pphone,#ideas .phone,#ideas .hvphone{box-shadow:0 10px 28px rgba(15,25,40,.22)}
 #ideas .pr-hint::before{box-shadow:none}
 #ideas .sv-card.on{box-shadow:none;background:#FFF1EE!important}
@@ -1088,6 +1087,14 @@ button.go{border:0;cursor:pointer;font-family:inherit}
 #ideas .ref{background:var(--soft)}
 #ideas .pill:not(.q):not(.m):not(.b){background:var(--soft)}
 #ideas .idea{padding-bottom:48px}
+
+/* ---------- 시안 영역 점선 제거 (구분은 배경색으로) ---------- */
+.hero .newmark{outline:none!important}
+#ideas .pr-act{background:rgba(255,255,255,.85);color:#1F3550}
+#ideas .pr-act.pay{background:var(--kyellow)}
+#ideas .cp-row{background:#FDECE9}
+#ideas .teaser{background:var(--soft)}
+#ideas .mp-st.cur i{background:#E3DBFF}
 </style>
 </head>
 <body>
@@ -1120,8 +1127,7 @@ button.go{border:0;cursor:pointer;font-family:inherit}
         </div>
         <div class="time">오전 10:00</div>
       </div>
-      <div class="legend"><i></i> 현재 카카오 메시지 광고에 없는 요소</div>
-      <div class="legend" style="margin-top:6px"><i style="border-style:solid;border-width:3px"></i> 아이디어 옆 참고 캡처에서 가져온 요소</div>
+      
     </div>
   </div>
 </header>
@@ -1330,7 +1336,7 @@ button.go{border:0;cursor:pointer;font-family:inherit}
       <div class="step">4. 신규 상품 아이디어</div>
       <div>
         <h2>네 가지 방향, 32개 상품</h2>
-        <p class="lead">갭을 세 방향으로 묶었습니다. <b>시간이 흐르는 메시지</b>는 발송 후에도 내용이 변하고, <b>대답하는 메시지</b>는 말풍선 안에서 고객과 주고받으며, <b>거래가 끝나는 메시지</b>는 카카오 안에서 구매·사용까지 닫고, <b>펼쳐지는 메시지</b>는 말풍선을 입구 삼아 전면 화면의 숏폼·라이브·무한 상품 피드로 들어갑니다. 각 아이디어의 목업은 직접 눌러 볼 수 있는 프로토타입이고, 점선 부분이 새로 필요한 기능입니다. 막히면 목업 위의 "처음부터"를 누르세요.</p>
+        <p class="lead">갭을 세 방향으로 묶었습니다. <b>시간이 흐르는 메시지</b>는 발송 후에도 내용이 변하고, <b>대답하는 메시지</b>는 말풍선 안에서 고객과 주고받으며, <b>거래가 끝나는 메시지</b>는 카카오 안에서 구매·사용까지 닫고, <b>펼쳐지는 메시지</b>는 말풍선을 입구 삼아 전면 화면의 숏폼·라이브·무한 상품 피드로 들어갑니다. 각 아이디어의 목업은 직접 눌러 볼 수 있는 프로토타입이고, 막히면 목업 위의 "처음부터"를 누르세요. 새로 필요한 기능은 각 아이디어 설명에 정리했습니다.</p>
       </div>
     </div>
   </div>
