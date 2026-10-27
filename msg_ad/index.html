@@ -1064,6 +1064,30 @@ button.go{border:0;cursor:pointer;font-family:inherit}
 .flow :is(.bsheet .opt span,.fchips span,.hvtabs span){background:var(--soft)}
 .flow .fchips span.on{background:var(--ink)}
 .flow .bsheet .opt span.on{background:var(--ink);color:#fff}
+
+/* ---------- 시안 영역(#ideas) 실선 전면 제거 · 리서치 섹션은 유지 ---------- */
+#ideas{border-style:none!important}
+#ideas *{border-style:none!important}
+#ideas *::before,#ideas *::after{border-style:none!important}
+#ideas .teaser,#ideas .pr-act,#ideas .cp-row,#ideas .mp-st.cur i{border-style:dashed!important}
+#ideas .sp-pin{border-style:solid!important}
+#ideas *:not(.newmark){outline:none!important}
+#ideas *:focus-visible{outline:2px dashed var(--new)!important;outline-offset:2px}
+#ideas .pphone,#ideas .phone,#ideas .hvphone{box-shadow:0 10px 28px rgba(15,25,40,.22)}
+#ideas .pr-hint::before{box-shadow:none}
+#ideas .sv-card.on{box-shadow:none;background:#FFF1EE!important}
+#ideas .lx-prog button.cur i{box-shadow:none}
+#ideas .sp-disk{box-shadow:0 6px 16px rgba(0,0,0,.18)}
+#ideas .sp-globe{box-shadow:none}
+#ideas .mp-picks button.on{box-shadow:none;transform:scale(1.06)}
+
+#ideas .proto .lx-prods button.on{box-shadow:none;background:var(--kyellow)}
+#ideas .dm-new{animation:none}
+#ideas .mp-stamps::before{display:none}
+#ideas .qr-grid{padding:5px;background:#fff;box-sizing:content-box}
+#ideas .ref{background:var(--soft)}
+#ideas .pill:not(.q):not(.m):not(.b){background:var(--soft)}
+#ideas .idea{padding-bottom:48px}
 </style>
 </head>
 <body>
