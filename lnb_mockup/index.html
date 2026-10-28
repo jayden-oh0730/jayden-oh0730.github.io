@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>소재 만들기 - kakao business 모먼트관리자센터</title>
+<style>
+:root { color-scheme: light; }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", -apple-system, sans-serif; color: #222; background: #f1f3f6; font-size: 14px; letter-spacing: -0.2px; min-width: 1500px; }
+button { font-family: inherit; cursor: pointer; border: none; background: none; color: inherit; letter-spacing: inherit; }
+input, textarea, select { font-family: inherit; letter-spacing: inherit; }
+a { color: inherit; text-decoration: none; }
+.chev { display: inline-block; width: 7px; height: 7px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg) translateY(-3px); margin-left: 6px; }
+.chev.up { transform: rotate(-135deg) translate(-2px, -1px); }
+.help { display: inline-flex; align-items: center; justify-content: center; width: 15px; height: 15px; border: 1.2px solid #999; border-radius: 50%; font-size: 10px; color: #888; font-weight: 600; margin-left: 4px; vertical-align: middle; }
+.req { color: #f04a3f; margin-left: 3px; }
+
+/* GNB */
+.gnb { height: 68px; background: #1c2449; color: #fff; display: flex; align-items: center; padding: 0 24px; position: sticky; top: 0; z-index: 20; }
+.logo { font-size: 19px; font-weight: 800; letter-spacing: -0.5px; }
+.logo-sub { font-size: 15px; color: #aab0c8; margin-left: 12px; font-weight: 500; }
+.gnb-menu { display: flex; gap: 0; margin-left: 98px; }
+.gnb-menu a { font-size: 15px; padding: 0 22px; color: #e8eaf3; display: flex; align-items: center; }
+.gnb-menu a.on { font-weight: 700; color: #fff; }
+.gnb-menu .chev { width: 6px; height: 6px; color: #8d93ad; }
+.gnb-right { margin-left: auto; display: flex; align-items: center; gap: 22px; font-size: 14px; color: #e8eaf3; }
+.badge-n { display: inline-flex; width: 15px; height: 15px; border-radius: 50%; background: #3f7cf5; font-size: 9px; font-weight: 700; align-items: center; justify-content: center; margin-left: 4px; vertical-align: 1px; }
+.avatar { display: inline-flex; width: 20px; height: 20px; border-radius: 5px; background: #8fd16a; color: #fff; font-size: 11px; align-items: center; justify-content: center; margin-right: 8px; font-weight: 700; }
+
+/* Layout */
+.wrap { display: flex; min-height: calc(100vh - 68px); }
+.lnb { width: 200px; background: #fff; flex-shrink: 0; position: sticky; top: 68px; height: calc(100vh - 68px); overflow-y: auto; border-right: 1px solid #eceef2; }
+/* 계정 영역 (Menu.svg 기준) */
+.acct { padding: 14px 14px 0; color: #191919; }
+.acct-name { display: flex; justify-content: space-between; align-items: center; width: 100%; text-align: left; font-family: 'Pretendard', -apple-system, sans-serif; font-size: 12px; font-weight: 700; line-height: 18px; color: #191919; cursor: pointer; }
+.acct-name .nm { flex: 1; min-width: 0; word-break: break-all; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; overflow: hidden; }
+.acct-name small { font-size: 12px; color: #949494; font-weight: 700; }
+.acct-name svg { flex-shrink: 0; margin-left: 8px; }
+.acct-row { display: flex; justify-content: space-between; align-items: center; height: 24px; font-family: 'Pretendard', -apple-system, sans-serif; font-size: 12px; font-weight: 400; color: #424242; }
+.acct-row * { font-weight: 400; }
+/* 라벨(ON/OFF·상태·계정 잔액) 컬러 */
+.acct-row > .lbl, .acct-row .lnk { color: #424242; }
+.acct-row.r-onoff { height: 16px; margin-top: 16px; margin-bottom: 4px; }
+.acct-row b { font-weight: 400; color: #191919; display: inline-flex; align-items: center; }
+.acct-row .lnk { display: inline-flex; align-items: center; gap: 4px; color: #424242; cursor: pointer; }
+.acct-row .lnk:hover { text-decoration: underline; }
+.toggle { width: 32px; height: 16px; background: #326EDC; border-radius: 8px; position: relative; cursor: pointer; transition: background-color .2s; flex-shrink: 0; }
+.toggle::after { content: ""; position: absolute; width: 13px; height: 13px; background: #fff; border-radius: 50%; top: 1.5px; left: 17.5px; transition: left .2s; }
+.toggle.off { background: #CCCCCC; }
+.toggle.off::after { left: 1.5px; }
+.dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: #326EDC; margin-right: 4px; }
+.dot.off { background: #949494; }
+.btn-all { display: block; width: 172px; height: 40px; margin: 15px 14px; background: #326EDC; color: #fff; border-radius: 8px; font-size: 14px; }
+.lnb-hr { border-top: 1px solid #DDDDDD; }
+.acct > .lnb-hr { margin: 10px 0 0; border-top-color: #EEEEEE; }
+.sel-wrap { position: relative; margin: 15px 14px; }
+.sel-display { width: 100%; height: 40px; border: 1px solid #c8ccd4; border-radius: 8px; display: flex; align-items: center; justify-content: space-between; padding: 0 14px 0 10px; font-size: 14px; background: #fff; transition: background-color .15s; }
+.sel-display .chev { color: #333; transition: transform .15s; }
+.sel-display { transition: border-color .15s; }
+.sel-display:hover { background: #fff; border-color: #444; }
+/* 펼침 상태: 버튼은 흰 배경 + 진한 보더, 화살표 위로 */
+.sel-wrap.open .sel-display { background: #fff; border-color: #444; }
+.sel-wrap.open .sel-display .chev { color: #333; transform: rotate(-135deg) translate(-2px, -1px); }
+.sel-list { display: none; position: absolute; left: 0; right: 0; top: 42px; background: #fff; border-radius: 8px; box-shadow: 0 6px 20px rgba(0,0,0,.08), 0 1px 4px rgba(0,0,0,.04); padding: 10px 10px 14px; z-index: 10; list-style: none; }
+.sel-wrap.open .sel-list { display: flex; flex-direction: column; gap: 0; }
+.sel-list li { height: 40px; display: flex; align-items: center; padding: 0 12px; border-radius: 8px; font-size: 14px; color: #222; cursor: pointer; transition: background-color .15s; }
+.sel-list li:not(.on):hover { background: #f5f6f8; }
+.sel-list li.on { background: #EBF4FF; }
+.nav a { display: flex; align-items: center; height: 52px; margin: 0 14px; padding: 0 10px; border-radius: 8px; font-size: 14px; gap: 10px; }
+.nav a { color: #191919; font-weight: 400; }
+.nav a.on { background: #EBF4FF; color: #326EDC; font-weight: 700; }
+.nav a { transition: background-color .15s; }
+.nav a:not(.on):hover { background: #f5f6f8; }
+.nav a .chev { margin-left: auto; color: #555; transition: transform .15s; }
+/* 1뎁스 호버 BG (#191919 기본 상태는 볼드 없음) */
+.nav > a:not(.on):hover,
+.nav .grp > a.parent:hover { background: #f7f7f7; }
+/* 2뎁스 */
+.nav .grp > a.parent { cursor: pointer; }
+.nav .grp.open > a.parent .chev { transform: rotate(-135deg) translate(-2px, -1px); }
+/* 하위 메뉴가 선택된 그룹: 파란 볼드 */
+.nav .grp.has-on > a.parent { color: #326EDC; font-weight: 700; }
+.nav .grp.has-on > a.parent .chev { color: #326EDC; }
+/* 1뎁스만 눌러 펼친 상태(2뎁스 미선택): BG 없음, #191919 보통 굵기 */
+.nav .grp.open:not(.has-on) > a.parent,
+.nav .grp.open:not(.has-on) > a.parent:hover { background: transparent; color: #191919; font-weight: 400; }
+.nav .grp.open > a.parent:hover { background: transparent; }
+.nav .sub { display: none; padding-bottom: 4px; }
+.nav .grp.open > .sub { display: block; }
+.nav .sub a { height: 36px; padding-left: 37px; font-size: 13.5px; color: #191919; }
+.nav .sub a.on { color: #326EDC; font-weight: 700; }
+.nav svg { width: 18px; height: 18px; flex-shrink: 0; }
+/* LNB 아이콘: 인라인 SVG (currentColor) */
+.nav .ic { width: 24px; height: 24px; flex-shrink: 0; color: #424242; transition: color .15s; }
+.nav a.on .ic, .nav .grp.has-on > a.parent .ic { color: #326EDC; }
+
+.lnb { display: flex; flex-direction: column; }
+/* 메뉴 펼침으로 LNB가 길어져도 상단 요소(버튼 등)가 눌리지 않도록 */
+.lnb > * { flex-shrink: 0; }
+.btn-all { height: 40px; min-height: 40px; }
+.lnb-fold { position: sticky; bottom: 18px; margin: auto 14px 18px auto; flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%; background: #f1f3f6; display: flex; align-items: center; justify-content: center; font-size: 15px; }
+
+.main { flex: 1; padding: 40px 0 60px; }
+.container { width: 1122px; margin: 0 auto 0 179px; }
+.page-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 40px; }
+.page-head h1 { font-size: 24px; font-weight: 700; display: flex; align-items: center; }
+.page-head h1 .help { width: 20px; height: 20px; font-size: 13px; margin-left: 6px; }
+.btn { height: 40px; padding: 0 19px; border-radius: 4px; font-size: 14px; display: inline-flex; align-items: center; gap: 6px; }
+.btn-line { border: 1px solid #d5d8de; background: #fff; }
+.btn-blue { background: #3772f0; color: #fff; }
+.btn-blue .help { border-color: #fff; color: #fff; }
+.ext { width: 11px; height: 11px; border: 1.3px solid #777; border-radius: 1px; position: relative; display: inline-block; }
+
+.cols { display: flex; gap: 16px; align-items: flex-start; }
+.col-l { width: 690px; display: flex; flex-direction: column; gap: 16px; }
+.col-r { width: 416px; display: flex; flex-direction: column; gap: 16px; position: sticky; top: 108px; }
+.card { background: #fff; border-radius: 12px; padding: 28px 28px; box-shadow: 0 1px 3px rgba(0,0,0,.04); }
+.card-head { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+.card-head h2 { font-size: 18px; font-weight: 700; }
+.card-head .chev { width: 10px; height: 10px; color: #555; }
+.card.closed .card-body { display: none; }
+.card.closed .card-head .chev { transform: rotate(45deg) translateY(-4px); }
+.notice { background: #f5f6f8; border-radius: 8px; padding: 16px; font-size: 12.5px; color: #444; line-height: 1.6; margin: 26px 0 30px; }
+.label { font-size: 14px; font-weight: 600; margin-bottom: 14px; display: flex; align-items: center; }
+.sub-label { font-size: 14px; color: #333; margin-bottom: 12px; display: flex; align-items: center; }
+.radios { display: flex; gap: 32px; margin-bottom: 16px; }
+.radio { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 14px; }
+.radio i { width: 18px; height: 18px; border-radius: 50%; border: 1.5px solid #c8ccd4; display: inline-block; position: relative; }
+.radio.on i { border: 5px solid #3772f0; }
+.box { border: 1px solid #e3e6eb; border-radius: 8px; padding: 22px 23px; }
+.field { border: 1px solid #c8ccd4; border-radius: 4px; position: relative; background: #fff; }
+.field:focus-within { border-color: #3772f0; }
+.field textarea { width: 100%; height: 82px; border: 0; outline: none; resize: none; padding: 10px 10px 28px; font-size: 14px; color: #222; background: transparent; }
+.field input { width: 100%; height: 38px; border: 0; outline: none; padding: 0 90px 0 10px; font-size: 14px; background: transparent; }
+.field ::placeholder { color: #999; }
+.counter { position: absolute; right: 10px; bottom: 9px; font-size: 12px; color: #999; display: flex; align-items: center; gap: 10px; }
+.field.single .counter { top: 50%; bottom: auto; transform: translateY(-50%); }
+.clock { width: 16px; height: 16px; border: 1.3px solid #888; border-radius: 50%; position: relative; }
+.clock::before { content: ""; position: absolute; left: 6px; top: 2.5px; width: 1.3px; height: 5px; background: #888; }
+.clock::after { content: ""; position: absolute; left: 6px; top: 7px; width: 4px; height: 1.3px; background: #888; }
+.url-tools { display: flex; align-items: center; gap: 12px; margin-top: 12px; font-size: 13px; color: #aaa; }
+.url-tools .plus { width: 15px; height: 15px; border-radius: 50%; background: #ccc; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; margin-right: 5px; }
+.url-tools .sep { width: 1px; height: 12px; background: #ddd; }
+.url-tools u { color: #999; }
+.select { height: 40px; border: 1px solid #c8ccd4; border-radius: 4px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px 0 10px; font-size: 14px; cursor: pointer; background: #fff; }
+.select .chev { color: #333; }
+.select.disabled { background: #f5f6f8; color: #aaa; border-color: #e3e6eb; cursor: default; }
+.gap-section { margin-top: 46px; }
+.gap-field { margin-top: 26px; }
+.btn-row { display: flex; gap: 12px; }
+.btn-add { height: 40px; padding: 0 20px; border-radius: 4px; background: #eaf1fe; color: #3772f0; font-size: 14px; display: inline-flex; align-items: center; gap: 8px; }
+.btn-add b { font-size: 18px; font-weight: 400; line-height: 1; }
+.btn-make { height: 40px; padding: 0 19px; border-radius: 4px; border: 1px solid #d5d8de; background: #fff; font-size: 14px; display: inline-flex; align-items: center; }
+.fold-legal { margin-top: 40px; font-weight: 600; display: flex; align-items: center; gap: 10px; cursor: pointer; }
+.fold-legal .chev { margin: 0 0 0 4px; transform: rotate(45deg) translateY(-3px); }
+.blue-num { color: #3772f0; }
+.tabs { display: flex; border-bottom: 1px solid #e3e6eb; width: 590px; margin-top: 4px; }
+.tabs button { height: 48px; padding: 0 16px; font-size: 14px; font-weight: 600; color: #444; border-bottom: 2px solid transparent; margin-bottom: -1px; }
+.tabs button.on { color: #222; border-color: #222; }
+.desc { font-size: 13px; color: #444; line-height: 1.6; margin: 18px 0 16px; }
+
+/* Preview */
+.pv-head { display: flex; justify-content: space-between; align-items: center; }
+.pv-head h2 { font-size: 18px; font-weight: 700; display: flex; align-items: center; }
+.btn-sm { height: 30px; padding: 0 14px; border: 1px solid #d5d8de; border-radius: 4px; font-size: 12.5px; background: #fff; }
+.pill-tabs { display: flex; gap: 8px; margin-top: 18px; }
+.pill-tabs button { height: 40px; padding: 0 18px; border-radius: 20px; font-size: 14px; font-weight: 600; background: #f1f3f6; color: #444; }
+.pill-tabs button.on { background: #222; color: #fff; }
+.ratio { display: flex; margin: 16px -28px 0; padding: 0 28px; border-bottom: 1px solid #e3e6eb; position: relative; }
+.ratio button { width: 90px; height: 42px; font-size: 14px; font-weight: 600; color: #444; border-bottom: 2px solid transparent; margin-bottom: -1px; display: flex; align-items: center; justify-content: center; gap: 6px; }
+.ratio button:first-child { justify-content: flex-start; padding-left: 16px; }
+.ratio button.on { color: #222; border-color: #222; }
+.ratio button span { color: #999; font-weight: 400; font-size: 15px; }
+.tooltip { position: absolute; right: 30px; top: 50px; background: #222; color: #fff; font-size: 11.5px; padding: 6px 9px; border-radius: 4px; white-space: nowrap; z-index: 2; }
+.tooltip::before { content: ""; position: absolute; top: -4px; left: 50%; margin-left: -4px; border: 4px solid transparent; border-top: 0; border-bottom-color: #222; }
+.pv-bar { background: #f5f6f8; margin: 0 -28px; padding: 12px 28px; display: flex; align-items: center; justify-content: space-between; }
+.chip-blue { background: #e4edfd; color: #2f6ae6; font-size: 11.5px; font-weight: 600; padding: 5px 9px; border-radius: 12px; display: inline-flex; align-items: center; }
+.chip-blue .chev { width: 5px; height: 5px; margin-left: 4px; }
+.pager { display: flex; align-items: center; gap: 0; font-size: 13px; color: #999; }
+.pager b { color: #222; font-weight: 600; }
+.pager button { width: 28px; height: 26px; border: 1px solid #e3e6eb; background: #fff; color: #ccc; font-size: 12px; }
+.pager button:first-of-type { margin-left: 8px; border-radius: 4px 0 0 4px; }
+.pager button:last-of-type { border-left: 0; border-radius: 0 4px 4px 0; }
+.ad-box { margin-top: 24px; background: #f1f3f6; border-radius: 10px; padding: 15px 15px 15px 16px; display: flex; justify-content: space-between; }
+.ad-box h3 { font-size: 16px; font-weight: 600; color: #b5b9c2; margin-top: 15px; }
+.cta { display: inline-flex; align-items: center; gap: 6px; background: #fff; border-radius: 14px; padding: 4px 10px 4px 4px; font-size: 11.5px; margin-top: 10px; }
+.cta i { width: 16px; height: 16px; border-radius: 50%; background: #eee; }
+.thumb { width: 145px; height: 83px; background: #d6d8dc; border-radius: 2px; }
+.pv-space { height: 670px; }
+.pv-note { background: #f5f6f8; border-radius: 10px; padding: 16px 24px; font-size: 12.5px; color: #555; line-height: 1.55; }
+.pv-note li { margin-left: 10px; padding-left: 2px; }
+.pv-note li + li { margin-top: 12px; }
+.pv-note a { color: #2f6ae6; text-decoration: underline; }
+.comp h2 { font-size: 18px; font-weight: 700; margin-bottom: 26px; }
+.prog { display: flex; align-items: center; font-size: 14px; margin-bottom: 16px; }
+.prog .name { width: 92px; display: flex; align-items: center; }
+.prog .bar { flex: 1; height: 8px; background: #eceef2; border-radius: 4px; overflow: hidden; }
+.prog .bar i { display: block; height: 100%; width: 0; background: #3772f0; transition: width .3s; }
+.prog .num { width: 48px; text-align: right; color: #444; }
+.hint { margin-top: 18px; background: #f5f6f8; border-radius: 24px; height: 48px; display: flex; align-items: center; padding: 0 16px; gap: 10px; font-size: 14px; }
+.smile { width: 22px; height: 22px; border-radius: 50%; background: #ffcb2e; position: relative; flex-shrink: 0; }
+.smile::before { content: "• •"; position: absolute; top: 1px; left: 5px; font-size: 9px; letter-spacing: 1px; color: #6b4a00; }
+.smile::after { content: ""; position: absolute; left: 6px; top: 11px; width: 10px; height: 5px; border-bottom: 2px solid #6b4a00; border-radius: 0 0 6px 6px; }
+
+/* ===================== 시안 스위처 ===================== */
+.vs { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 1000; display: flex; align-items: center; gap: 4px; padding: 6px; background: rgba(25,25,25,.92); color: #fff; border-radius: 28px; box-shadow: 0 8px 24px rgba(0,0,0,.18); font-family: 'Pretendard', -apple-system, sans-serif; backdrop-filter: blur(6px); user-select: none; }
+.vs-nav { width: 32px; height: 32px; border-radius: 50%; color: #fff; font-size: 16px; display: flex; align-items: center; justify-content: center; }
+.vs-nav:hover:not(:disabled) { background: rgba(255,255,255,.12); }
+.vs-nav:disabled { opacity: .3; cursor: default; }
+.vs-list { display: flex; gap: 2px; }
+.vs-chip { height: 32px; padding: 0 14px; border-radius: 16px; font-size: 13px; font-weight: 600; color: rgba(255,255,255,.7); }
+.vs-chip:hover { color: #fff; background: rgba(255,255,255,.08); }
+.vs-chip.on { background: #fff; color: #191919; }
+.vs-desc { font-size: 12px; color: rgba(255,255,255,.6); padding: 0 10px 0 6px; max-width: 260px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.vs-desc:empty { display: none; }
+.vs-hide { width: 24px; height: 24px; border-radius: 50%; font-size: 12px; color: rgba(255,255,255,.6); margin-left: 2px; }
+.vs-hide:hover { color: #fff; background: rgba(255,255,255,.12); }
+.vs.min .vs-list, .vs.min .vs-desc, .vs.min .vs-nav { display: none; }
+.vs.min .vs-cur { display: inline-flex; }
+.vs-cur { display: none; height: 32px; padding: 0 12px; align-items: center; font-size: 13px; font-weight: 700; }
+
+/* ===================== 시안별 스타일 =====================
+   A-1(기준안)은 위 기본 스타일 그대로 사용합니다.
+   새 시안은 아래처럼 body[data-variant="ID"] 로 범위를 지정해 덮어씁니다.
+   예) body[data-variant="A-2"] .nav a.on { background: #F0F5FF; }
+   ======================================================== */
+
+
+/* ---------- A-2 ---------- */
+/* 드롭다운: 호버 상태(#444 보더)를 노말에 적용 + 텍스트 볼드 */
+body[data-variant="A-2"] .sel-display { border-color: #444; font-weight: 700; }
+/* LNB 메뉴: 선택/상위 강조 포함 모든 볼드 제거 */
+body[data-variant="A-2"] .nav a,
+body[data-variant="A-2"] .nav a.on,
+body[data-variant="A-2"] .nav .grp.has-on > a.parent,
+body[data-variant="A-2"] .nav .sub a.on { font-weight: 400; }
+
+/* ---------- B-1 (B-2도 공통 적용) ---------- */
+/* 전체 광고 상품 둘러보기: 화이트 라인 버튼 */
+body[data-variant="B-1"] .btn-all,
+body[data-variant="B-2"] .btn-all { background: #fff; color: #191919; border: 1px solid #DDDDDD; transition: background-color .15s; }
+body[data-variant="B-1"] .btn-all:hover,
+body[data-variant="B-2"] .btn-all:hover { background: #F7F7F7; }
+/* 드롭다운: 블루 보더 + 블루 볼드 텍스트, 호버 상태 없음 */
+body[data-variant="B-1"] .sel-display,
+body[data-variant="B-2"] .sel-display,
+body[data-variant="B-1"] .sel-display:hover,
+body[data-variant="B-2"] .sel-display:hover,
+body[data-variant="B-1"] .sel-wrap.open .sel-display,
+body[data-variant="B-2"] .sel-wrap.open .sel-display { background: #fff; border-color: #326EDC; color: #326EDC; font-weight: 700; }
+body[data-variant="B-1"] .sel-display .chev,
+body[data-variant="B-2"] .sel-display .chev,
+body[data-variant="B-1"] .sel-wrap.open .sel-display .chev,
+body[data-variant="B-2"] .sel-wrap.open .sel-display .chev { color: #326EDC; }
+
+/* ---------- B-2 ---------- */
+/* B-1 기반, 상단 버튼만 진한 보더 */
+body[data-variant="B-2"] .btn-all { border-color: #444; }
+
+/* ---------- C-1 ---------- */
+/* 계정 잔액 하단 라인 제거 + 버튼 사이 여백 15px */
+/* 전체 광고 상품 둘러보기: 화이트 라인 버튼 (B-1과 동일) */
+body[data-variant="C-1"] .btn-all { background: #fff; color: #191919; border: 1px solid #DDDDDD; transition: background-color .15s; }
+body[data-variant="C-1"] .btn-all:hover { background: #F7F7F7; }
+/* 드롭다운: 블루 채움 + 화이트 볼드 텍스트, 호버 상태 없음 */
+body[data-variant="C-1"] .sel-display,
+body[data-variant="C-1"] .sel-display:hover,
+body[data-variant="C-1"] .sel-wrap.open .sel-display { background: #326EDC; border-color: #326EDC; color: #fff; font-family: 'Pretendard', -apple-system, sans-serif; font-weight: 600; }
+/* 상단 계정명: 세미볼드 */
+body[data-variant="C-1"] .acct-name,
+body[data-variant="C-1"] .acct-name small { font-weight: 600; }
+body[data-variant="C-1"] .sel-display .chev,
+body[data-variant="C-1"] .sel-wrap.open .sel-display .chev { color: #fff; }
+/* 메뉴 리스트: 볼드 없음 */
+body[data-variant="C-1"] .nav a,
+body[data-variant="C-1"] .nav a.on,
+body[data-variant="C-1"] .nav .grp.has-on > a.parent,
+body[data-variant="C-1"] .nav .sub a.on,
+body[data-variant="C-1"] .sel-list li { font-weight: 400; }
+
+/* 계정 잔액 ↔ 전체 광고 상품 둘러보기 라인 제거 + 버튼 상하 여백 20px (전 시안 공통) */
+.acct > .lnb-hr { display: none; }
+.lnb .btn-all { margin-top: 20px; margin-bottom: 20px; }
+/* 버튼 하단 라인 아래 쉐도우 (Rectangle 347616036.svg: 4px, #000→#fff 그라디언트, 5%) (전 시안 공통) */
+.btn-all + .lnb-hr { position: relative; }
+.btn-all + .lnb-hr::after { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 4px; background: linear-gradient(to bottom, rgba(0,0,0,.05), rgba(255,255,255,.05)); pointer-events: none; }
+/* 라인 ↔ 드롭다운(좌우 네비게이션) 여백 20px (전 시안 공통) */
+.lnb .sel-wrap, .lnb .type-step { margin-top: 20px !important; }
+/* 드롭다운(좌우 네비게이션) ↔ 하단 메뉴 여백 10px (전 시안 공통) */
+.lnb .sel-wrap, .lnb .type-step { margin-bottom: 10px !important; }
+/* 메뉴 선택 상태: 하늘색 BG 제거 (전 시안 공통) */
+.nav a.on, .nav a.on:hover { background: transparent; }
+/* 계정 잔액: 꺾쇠 없이 밑줄 텍스트 링크 (전 시안 공통) */
+.acct-row .lnk-ic { display: none; }
+.acct-row .lnk-t { text-decoration: underline; text-underline-offset: 3px; }
+.acct-row .lnk:hover { text-decoration: none; }
+/* 모먼트 AI: 외부 링크 화살표 우측 정렬 (전 시안 공통) */
+/* 모먼트 AI 외부 링크 아이콘: 1Depth.svg 원본 크기(9×9, 선 1.4px) 그대로
+   ※ 공통 .nav svg(18px) 규칙에 의해 2배로 확대되던 문제 수정
+   위치: 위 메뉴 펼침 화살표(.chev)와 같은 세로 중심선 */
+.nav .ext-ic { margin-left: auto; margin-right: 0; display: inline-flex; color: #191919; }
+.nav .ext-ic svg { display: block; flex-shrink: 0; width: 9px; height: 9px; }
+
+/* ---------- C-2 ---------- */
+/* 계정 잔액 하단 라인 제거 + 버튼 사이 여백 15px */
+/* 전체 광고 상품 둘러보기: 하늘색 채움 + 블루 볼드 */
+body[data-variant="C-2"] .btn-all { background: #EBF4FF; color: #326EDC; font-weight: 700; border: 0; transition: background-color .15s; }
+body[data-variant="C-2"] .btn-all:hover { background: #DDEBFF; }
+/* 드롭다운: 블루 채움 + 화이트 레귤러, 호버 상태 없음 */
+body[data-variant="C-2"] .sel-display,
+body[data-variant="C-2"] .sel-display:hover,
+body[data-variant="C-2"] .sel-wrap.open .sel-display { background: #326EDC; border-color: #326EDC; color: #fff; font-weight: 400; }
+body[data-variant="C-2"] .sel-display .chev,
+body[data-variant="C-2"] .sel-wrap.open .sel-display .chev { color: #fff; }
+/* 메뉴: 광고 만들기를 최상단 */
+body[data-variant="C-2"] .nav { display: flex; flex-direction: column; }
+body[data-variant="C-2"] .nav > a[data-key="광고 만들기"] { order: -1; }
+/* 선택 상태: 하늘색 BG 없이 블루 볼드 텍스트·아이콘만 (1뎁스·2뎁스 공통) */
+body[data-variant="C-2"] .nav a.on,
+body[data-variant="C-2"] .nav a.on:hover { background: transparent; color: #326EDC; font-weight: 700; }
+body[data-variant="C-2"] .nav a.on .ic { color: #326EDC; }
+/* 선택되지 않은 메뉴: 볼드 없음 */
+body[data-variant="C-2"] .nav a:not(.on),
+body[data-variant="C-2"] .sel-list li { font-weight: 400; }
+/* 2뎁스 선택 시 1뎁스: 블루 볼드, 화살표는 #191919 유지 */
+body[data-variant="C-2"] .nav .grp.has-on > a.parent { font-weight: 700; }
+body[data-variant="C-2"] .nav .grp.has-on > a.parent .chev { color: #191919; }
+body[data-variant="C-2"] .nav a .chev { color: #191919; }
+
+/* 광고 유형 좌우 네비게이션 (기본 숨김, D-1에서 사용) */
+.type-step { display: none; align-items: center; justify-content: space-between; height: 40px; margin: 15px 14px; padding: 0 6px; border: 1px solid #CCCCCC; border-radius: 8px; background: #fff; }
+.ts-text { flex: 1; text-align: center; font-family: 'Pretendard', -apple-system, sans-serif; font-size: 14px; font-weight: 700; color: #191919; }
+.ts-btn { width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; color: #949494; border-radius: 6px; }
+/* 화살표를 바깥쪽으로 6px씩 이동 */
+.ts-btn[data-dir="-1"] { transform: translateX(-6px); }
+.ts-btn[data-dir="1"] { transform: translateX(6px); }
+
+.ts-ic-b { display: none; }
+.ts-box { transition: fill .15s; }
+/* ---------- D-1 ---------- */
+/* 드롭다운 대신 좌우 네비게이션 */
+body[data-variant="D-1"] #adType,
+body[data-variant="D-2"] #adType,
+body[data-variant="D-3"] #adType { display: none; }
+body[data-variant="D-1"] .type-step,
+body[data-variant="D-2"] .type-step,
+body[data-variant="D-3"] .type-step { display: flex; }
+/* ---------- D-2 ---------- */
+/* 계정 잔액 ↔ 전체 광고 상품 둘러보기 사이 라인 제거 */
+/* 계정 잔액 ↔ 버튼 여백 15px */
+/* 좌우 네비게이션: 외곽 보더 없음 + 하단 구분선, 화살표는 작은 박스 버튼 */
+body[data-variant="D-2"] .type-step { height: 41px; margin: 8px 14px 15px; padding: 0 0 8px; border: 0; border-bottom: 1px solid #EEEEEE; border-radius: 0; background: transparent; }
+body[data-variant="D-2"] .ts-btn,
+body[data-variant="D-2"] .ts-btn[data-dir] { width: 18.4px; height: 18.4px; transform: none; border: 0; border-radius: 5px; background: transparent; padding: 0; }
+body[data-variant="D-2"] .ts-ic-a { display: none; }
+body[data-variant="D-2"] .ts-ic-b { display: block; }
+/* 호버: #000000 6% 채움 */
+body[data-variant="D-2"] .ts-btn:hover .ts-box { fill: rgba(0,0,0,.06); }
+/* 하단 라인: < > 버튼 하단에서 20px 아래 */
+body[data-variant="D-2"] .type-step { height: auto; padding: 0 0 20px; align-items: center; }
+body[data-variant="D-2"] .ts-text { line-height: 18.4px; }
+
+/* ---------- D-3 ---------- */
+/* D-2 레이아웃 기반 */
+/* 계정 잔액 ↔ 전체 광고 상품 둘러보기 사이 라인 제거 */
+/* 계정 잔액 ↔ 버튼 여백 15px */
+/* 좌우 네비게이션: 외곽 보더 없음 + 하단 구분선, 화살표는 작은 박스 버튼 */
+body[data-variant="D-3"] .type-step { height: 41px; margin: 8px 14px 15px; padding: 0 0 8px; border: 0; border-bottom: 1px solid #EEEEEE; border-radius: 0; background: transparent; }
+body[data-variant="D-3"] .ts-btn,
+body[data-variant="D-3"] .ts-btn[data-dir] { width: 18.4px; height: 18.4px; transform: none; border: 0; border-radius: 5px; background: transparent; padding: 0; }
+body[data-variant="D-3"] .ts-ic-a { display: none; }
+body[data-variant="D-3"] .ts-ic-b { display: block; }
+/* 호버: #000000 6% 채움 */
+body[data-variant="D-3"] .ts-btn:hover .ts-box { fill: rgba(0,0,0,.06); }
+/* 전체 광고 상품 둘러보기: 연회색 채움 버튼 */
+body[data-variant="D-3"] .btn-all { background: #F7F7F7; color: #191919; border: 1px solid #DDDDDD; transition: background-color .15s; }
+body[data-variant="D-3"] .btn-all:hover { background: #EEEEEE; }
+/* 광고 유형 텍스트: 블루 */
+body[data-variant="D-3"] .ts-text { color: #326EDC; }
+
+/* ---------- 메뉴 행 레이아웃 (A-1 기준, 전 시안 공통) ----------
+   호버 BG 폭 180px(LNB 좌우 10px 안쪽), 높이 52px
+   아이콘 시작 = 드롭다운 왼쪽 끝(14px), 아이콘↔텍스트 6px, 우측 화살표는 BG 오른쪽 끝에서 6px 안쪽 */
+body[data-variant] .nav a { margin: 0 10px; padding: 0 6px 0 4px; gap: 6px; }
+/* 2뎁스 텍스트는 1뎁스 텍스트 시작점(4 + 아이콘 24 + 6)에 맞춤 */
+body[data-variant] .nav .sub a { padding-left: 34px; }
+/* 우측 화살표(펼침 ∨, 외부링크 ↗) 위치: BG 오른쪽 끝 → 아이콘 중심 약 13px (첨부 시안 기준) */
+body[data-variant] .nav > a,
+body[data-variant] .nav .grp > a.parent { padding-right: 9px; }
+body[data-variant] .nav .ext-ic { margin-right: 0; }
+/* 2뎁스가 있는 메뉴: 선택 상태여도 화살표는 #191919 (전 시안 공통) */
+body[data-variant] .nav .grp > a.parent .chev,
+body[data-variant] .nav .grp.has-on > a.parent .chev { color: #191919; }
+</style>
+</head>
+<body>
+
+<header class="gnb">
+  <div class="logo">kakao business</div>
+  <div class="logo-sub">모먼트관리자센터</div>
+  <nav class="gnb-menu">
+    <a href="#">파트너</a>
+    <a href="#" class="on">광고<span class="chev"></span></a>
+    <a href="#">판매<span class="chev"></span></a>
+    <a href="#">비즈도구<span class="chev"></span></a>
+    <a href="#">지원<span class="chev"></span></a>
+  </nav>
+  <div class="gnb-right">
+    <span>알림<span class="badge-n">N</span></span>
+    <span>공지사항<span class="badge-n">N</span></span>
+    <span>고객센터<span class="chev" style="color:#8d93ad;width:6px;height:6px"></span></span>
+    <span><span class="avatar">일</span>kakao@kakaocorp.com<span class="chev" style="color:#8d93ad;width:6px;height:6px"></span></span>
+  </div>
+</header>
+
+<div class="wrap">
+  <aside class="lnb">
+    <div class="acct">
+      <button type="button" class="acct-name" aria-label="광고계정 선택">
+        <span class="nm">일이삼사오육칠팔구십일이삼사오육칠팔구십<small>(123456)</small></span>
+        <svg width="12" height="8" viewBox="171 25 12 7" fill="none" aria-hidden="true"><path d="M181.778 25.9999L177.257 30.9312C177.059 31.1474 176.718 31.1474 176.52 30.9312L172 25.9999" stroke-width="1.4" stroke-linecap="round" stroke="#191919"/></svg>
+      </button>
+      <div class="acct-row r-onoff"><span class="lbl">ON/OFF</span><div class="toggle" id="acctToggle" role="switch" aria-checked="true" tabindex="0"></div></div>
+      <div class="acct-row"><span class="lbl">상태</span><b><span class="dot" id="acctDot"></span><span id="acctState">운영가능</span></b></div>
+      <div class="acct-row"><span class="lnk"><span class="lnk-t">계정 잔액</span><svg class="lnk-ic" width="5" height="9" viewBox="63 110.7 5 8.8" fill="none" aria-hidden="true"><path d="M63.6667 111.284L67.5021 114.8C67.6702 114.954 67.6702 115.219 67.5021 115.373L63.6667 118.889" stroke-width="1.08889" stroke-linecap="round" stroke="#424242"/></svg></span><b>100,000,000,000</b></div>
+      <div class="lnb-hr"></div>
+    </div>
+    <button class="btn-all">전체 광고 상품 둘러보기</button>
+    <div class="lnb-hr"></div>
+    <div class="sel-wrap" id="adType">
+      <button type="button" class="sel-display" aria-haspopup="listbox" aria-expanded="false"><span class="sel-text">디스플레이</span><span class="chev"></span></button>
+      <ul class="sel-list" role="listbox">
+        <li role="option" class="on">디스플레이</li>
+        <li role="option">메시지</li>
+        <li role="option">비즈맥스 캠페인</li>
+      </ul>
+    </div>
+    <div class="type-step" id="adTypeStep" role="group" aria-label="광고 유형">
+      <button type="button" class="ts-btn" data-dir="-1" aria-label="이전 광고 유형"><svg class="ts-ic-a" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 3L5 8l5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ts-ic-b" width="18.4" height="18.4" viewBox="21.8 24.8 18.4 18.4" fill="none" aria-hidden="true"><rect class="ts-box" x="22.5" y="25.5" width="17" height="17" rx="5" stroke="#DDDDDD" stroke-width="1.4"/><path d="M32.0112 30.5063L28.5177 33.9999L32.0112 37.4935" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" stroke="#191919"/></svg></button>
+      <span class="ts-text" aria-live="polite">디스플레이</span>
+      <button type="button" class="ts-btn" data-dir="1" aria-label="다음 광고 유형"><svg class="ts-ic-a" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ts-ic-b" width="18.4" height="18.4" viewBox="174.8 24.8 18.4 18.4" fill="none" aria-hidden="true"><rect class="ts-box" x="175.5" y="25.5" width="17" height="17" rx="5" stroke="#DDDDDD" stroke-width="1.4"/><path d="M182.989 30.5063L186.482 33.9999L182.989 37.4935" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" stroke="#191919"/></svg></button>
+    </div>
+    <nav class="nav" id="lnbNav"></nav>
+    <button class="lnb-fold" aria-label="메뉴 접기">←</button>
+  </aside>
+
+  <main class="main">
+    <div class="container">
+      <div class="page-head">
+        <h1>소재 만들기<span class="help">?</span></h1>
+        <div style="display:flex;gap:12px">
+          <button class="btn btn-line">소재 만들기 도움말 보러가기 <span style="font-size:13px;color:#777">↗</span></button>
+          <button class="btn btn-blue">기존 소재 불러오기<span class="help">?</span></button>
+        </div>
+      </div>
+
+      <div class="cols">
+        <!-- LEFT -->
+        <div class="col-l">
+          <section class="card">
+            <div class="card-head" onclick="this.parentElement.classList.toggle('closed')"><h2>브랜드 가이드</h2><span class="chev up"></span></div>
+            <div class="card-body">
+              <div class="notice">브랜드 가이드 요소는 등록 후 수정할 수 없습니다. 수정이 필요하면 기존 소재 불러오기로 새 소재를 등록해 주세요.</div>
+
+              <div class="label">랜딩 URL<span class="req" style="margin-left:1px">*</span><span class="help">?</span></div>
+              <div class="radios" id="urlType">
+                <label class="radio on"><i></i>공통 URL 적용</label>
+                <label class="radio"><i></i>모바일/PC 개별 적용</label>
+              </div>
+              <div class="box" id="urlBox">
+                <div class="sub-label">모바일/PC</div>
+                <div class="field"><textarea maxlength="1000" placeholder="https:// 또는 http:// 로 시작하는 주소를 입력해 주세요."></textarea><div class="counter"><span class="cnt">0/1000</span><span class="clock"></span></div></div>
+                <div class="url-tools"><span><span class="plus">+</span>매개변수 입력</span><span class="sep"></span><u>URL 미리보기</u></div>
+              </div>
+
+              <div class="gap-section">
+                <div class="label">프로필 정보</div>
+                <div class="box">
+                  <div class="sub-label">프로필 URL<span class="help">?</span></div>
+                  <div class="select">카카오톡 채널 선택<span class="chev"></span></div>
+                  <div class="sub-label gap-field">프로필 이름<span class="req">*</span></div>
+                  <div class="field single"><input id="profileName" maxlength="20" placeholder="프로필 이름을 입력해 주세요."><div class="counter"><span class="cnt">0/20</span><span class="clock"></span></div></div>
+                  <div class="sub-label gap-field">프로필 이미지<span class="req">*</span></div>
+                  <div class="btn-row">
+                    <button class="btn-add"><b>+</b>이미지 추가</button>
+                    <button class="btn-make">이미지 만들기<span class="help">?</span></button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="fold-legal"><span class="chev"></span>법적 고지문</div>
+            </div>
+          </section>
+
+          <section class="card">
+            <div class="card-head" onclick="this.parentElement.classList.toggle('closed')"><h2>이미지/동영상</h2><span class="chev up"></span></div>
+            <div class="card-body">
+              <div class="notice" style="margin-bottom:28px">이미지와 동영상 합산 최대 10개 등록 가능합니다. (홍보 이미지 최소 3개 필수 등록)<br>슬라이드는 최대 10개 등록 가능합니다. 슬라이드 요소를 등록하면 더 많은 템플릿에 광고가 노출됩니다.</div>
+              <div class="label" style="margin-bottom:16px">홍보 이미지/동영상<span class="req">*</span>&nbsp;<span class="blue-num">0</span>/10</div>
+              <div class="sub-label">홍보 이미지<span class="req">*</span></div>
+              <div class="btn-row">
+                <button class="btn-add"><b>+</b>이미지 추가</button>
+                <button class="btn-make">이미지 만들기<span class="help">?</span></button>
+              </div>
+              <div class="sub-label" style="margin-top:30px">홍보 동영상</div>
+              <button class="btn-add"><b>+</b>동영상 추가</button>
+
+              <div class="label" style="margin-top:46px;margin-bottom:12px">슬라이드</div>
+              <div class="tabs" id="slideTabs">
+                <button class="on">상품 세트 연동</button>
+                <button>직접 설정 0/10</button>
+              </div>
+              <p class="desc">상품의 타이틀이 16자 이상일 경우 AI를 통해 타이틀 자동 생성 및 사용됩니다.<br>광고 관련 법령, 모먼트 심사 및 운영 정책을 위반할 경우 광고 노출이 보류 또는 중단될 수 있습니다.</p>
+              <div class="box">
+                <div class="sub-label">카탈로그 정보<span class="help">?</span></div>
+                <div class="select disabled">{카탈로그명}(카탈로그ID)</div>
+                <div class="select" style="margin-top:12px">상품 세트 선택<span class="chev"></span></div>
+                <div class="sub-label gap-field">상품별 트래킹 URL<span class="help">?</span></div>
+                <div class="field"><textarea maxlength="1000" placeholder="https:// 또는 http:// 로 시작하는 주소를 입력해 주세요."></textarea><div class="counter"><span class="cnt">0/1000</span><span class="clock"></span></div></div>
+                <div class="url-tools"><span><span class="plus">+</span>매개변수 입력</span><span class="sep"></span><u>URL 미리보기</u></div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="col-r">
+          <section class="card" style="padding-bottom:28px">
+            <div class="pv-head"><h2>미리보기<span class="help">?</span></h2><button class="btn-sm">광고 전체 보기</button></div>
+            <div class="pill-tabs" id="mediaTabs"><button class="on">이미지</button><button>동영상</button></div>
+            <div class="ratio" id="ratioTabs">
+              <button class="on">1.91:1 <span>+</span></button>
+              <button>1:1 <span>+</span></button>
+              <button>4:5 <span>+</span></button>
+              <button>9:16 <span>+</span></button>
+              <div class="tooltip">에셋 입력 필요</div>
+            </div>
+            <div class="pv-bar">
+              <span class="chip-blue">에셋 입력 필요<span class="chev"></span></span>
+              <div class="pager"><b>0</b>/10<button>&lt;</button><button>&gt;</button></div>
+            </div>
+            <div class="ad-box">
+              <div>
+                <h3 id="pvName">설명 문구</h3>
+                <div class="cta"><i></i>행동유도버튼 ›</div>
+              </div>
+              <div class="thumb"></div>
+            </div>
+            <div class="pv-space"></div>
+            <ul class="pv-note">
+              <li>사용자의 디바이스, 폰트 설정, 브라우저 환경에 따라 실제 노출 시 줄바꿈, 이미지 크롭 등으로 미리보기와 다르게 보일 수 있습니다.</li>
+              <li>광고주는 타인의 권리(지적재산권, 초상권 등)를 침해하는 광고를 금지하는 <a href="#">카카오모먼트 정책</a>을 준수해야 합니다.</li>
+            </ul>
+          </section>
+
+          <section class="card comp">
+            <h2>소재 완성도</h2>
+            <div class="prog"><span class="name">필수 항목<span class="help">?</span></span><span class="bar"><i id="reqBar"></i></span><span class="num" id="reqNum">0/21</span></div>
+            <div class="prog"><span class="name">선택 항목<span class="help">?</span></span><span class="bar"><i></i></span><span class="num">0/50</span></div>
+            <div class="hint"><span class="smile"></span>광고 노출을 위해 필수 항목부터 채워주세요</div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+
+<!-- 시안 스위처 (←/→ 키로도 이동) -->
+<div class="vs" id="variantSwitcher" role="toolbar" aria-label="시안 선택">
+  <button type="button" class="vs-nav" data-dir="-1" aria-label="이전 시안">‹</button>
+  <div class="vs-list"></div>
+  <button type="button" class="vs-nav" data-dir="1" aria-label="다음 시안">›</button>
+  <span class="vs-cur"></span>
+  <span class="vs-desc"></span>
+  <button type="button" class="vs-hide" aria-label="스위처 접기">–</button>
+</div>
+<script>
+// 글자 수 카운터
+document.querySelectorAll('.field').forEach(f => {
+  const el = f.querySelector('textarea, input');
+  const cnt = f.querySelector('.cnt');
+  el.addEventListener('input', () => { cnt.textContent = el.value.length + '/' + el.maxLength; updateProgress(); });
+});
+// 탭/라디오 단일 선택
+function single(groupSel, itemSel) {
+  const g = document.querySelector(groupSel);
+  g.querySelectorAll(itemSel).forEach(b => b.addEventListener('click', () => {
+    g.querySelectorAll(itemSel).forEach(x => x.classList.remove('on'));
+    b.classList.add('on');
+  }));
+}
+single('#urlType', '.radio');
+single('#slideTabs', 'button');
+single('#mediaTabs', 'button');
+single('#ratioTabs', 'button');
+// 디스플레이 드롭다운
+(() => {
+  const wrap = document.getElementById('adType');
+  const btn = wrap.querySelector('.sel-display');
+  const setOpen = v => { wrap.classList.toggle('open', v); btn.setAttribute('aria-expanded', v); };
+  btn.addEventListener('click', e => { e.stopPropagation(); setOpen(!wrap.classList.contains('open')); });
+  wrap.querySelectorAll('.sel-list li').forEach(li => li.addEventListener('click', () => {
+    setAdType(li.textContent.trim());
+    setOpen(false);
+  }));
+  document.addEventListener('click', e => { if (!wrap.contains(e.target)) setOpen(false); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') setOpen(false); });
+})();
+// 광고 유형 공통 상태 (드롭다운 · 좌우 네비게이션 동기화)
+const AD_TYPES = ['디스플레이', '메시지', '비즈맥스 캠페인'];
+let adType = AD_TYPES[0];
+function setAdType(t) {
+  adType = t;
+  try { localStorage.setItem('lnbAdType', t); } catch (e) {}
+  const wrap = document.getElementById('adType');
+  wrap.querySelectorAll('.sel-list li').forEach(x => x.classList.toggle('on', x.textContent.trim() === t));
+  wrap.querySelector('.sel-text').textContent = t;
+  document.querySelector('#adTypeStep .ts-text').textContent = t;
+  renderLnb(t);
+}
+// 좌우 네비게이션 (D-1): 순환 이동
+document.querySelectorAll('#adTypeStep .ts-btn').forEach(b => b.addEventListener('click', () => {
+  const n = AD_TYPES.length;
+  setAdType(AD_TYPES[(AD_TYPES.indexOf(adType) + +b.dataset.dir + n) % n]);
+}));
+// 계정 ON/OFF 토글
+(() => {
+  const t = document.getElementById('acctToggle');
+  const flip = () => {
+    const off = t.classList.toggle('off');
+    t.setAttribute('aria-checked', !off);
+    document.getElementById('acctDot').classList.toggle('off', off);
+    document.getElementById('acctState').textContent = off ? '운영불가' : '운영가능';
+  };
+  t.addEventListener('click', flip);
+  t.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flip(); } });
+})();
+// LNB 메뉴: 광고 유형(드롭다운)별 구성
+const LNB_ICONS = {"대시보드": "<svg class=\"ic\" viewBox=\"181.0 100.0 24 24\" width=\"24\" height=\"24\" fill=\"none\" aria-hidden=\"true\"><path d=\"M186.5 118.696H199.848V105.5H186.5V118.696ZM200.098 120.196H186.25C185.561 120.196 185 119.635 185 118.946V105.25C185 104.56 185.561 104 186.25 104H200.098C200.787 104 201.348 104.56 201.348 105.25V118.946C201.348 119.635 200.787 120.196 200.098 120.196V120.196Z\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"currentColor\" />\n<path d=\"M192.424 119.288H193.924V104.862H192.424V119.288Z\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"currentColor\" />\n<path d=\"M185.756 112.825H193.274V111.325H185.756V112.825Z\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"currentColor\" />\n</svg>", "광고 만들기": "<svg class=\"ic\" viewBox=\"847.0 100.0 24 24\" width=\"24\" height=\"24\" fill=\"none\" aria-hidden=\"true\"><mask id=\"mask14_444_2567\" style=\"mask-type:luminance\" maskUnits=\"userSpaceOnUse\" x=\"850\" y=\"103\" width=\"18\" height=\"18\">\n<path d=\"M850.036 103.035H867.968V120.968H850.036V103.035Z\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"white\" />\n</mask>\n<g mask=\"url(#mask14_444_2567)\">\n<path d=\"M859.002 104.535C854.885 104.535 851.536 107.885 851.536 112.001C851.536 116.118 854.885 119.468 859.002 119.468C863.119 119.468 866.469 116.118 866.469 112.001C866.469 107.885 863.119 104.535 859.002 104.535M859.002 120.968C854.058 120.968 850.036 116.946 850.036 112.001C850.036 107.057 854.058 103.035 859.002 103.035C863.946 103.035 867.969 107.057 867.969 112.001C867.969 116.946 863.946 120.968 859.002 120.968\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"currentColor\" />\n</g>\n<mask id=\"mask15_444_2567\" style=\"mask-type:luminance\" maskUnits=\"userSpaceOnUse\" x=\"850\" y=\"103\" width=\"18\" height=\"18\">\n<path d=\"M850.035 120.968H867.968V103.035H850.035V120.968Z\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"white\" />\n</mask>\n<g mask=\"url(#mask15_444_2567)\">\n<path d=\"M858.251 116.178H859.751V107.824H858.251V116.178Z\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"currentColor\" />\n<path d=\"M854.824 112.751H863.178V111.251H854.824V112.751Z\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"currentColor\" />\n</g>\n</svg>", "보고서": "<svg class=\"ic\" viewBox=\"921.0 100.0 24 24\" width=\"24\" height=\"24\" fill=\"none\" aria-hidden=\"true\"><path d=\"M928.699 109.002H936.809V107.502H928.699V109.002Z\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"currentColor\" />\n<path d=\"M928.699 113.545H933.568V112.045H928.699V113.545Z\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"currentColor\" />\n<path d=\"M926.5 118.912H935.899L939.008 115.817V104.5H926.5V118.912ZM936.16 120.412H925.864C925.388 120.412 925 120.024 925 119.548V103.864C925 103.388 925.388 103 925.864 103H939.645C940.121 103 940.508 103.388 940.508 103.864V116.386L940.26 116.688L936.553 120.378L936.16 120.412Z\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"currentColor\" />\n</svg>", "변경이력": "<svg class=\"ic\" viewBox=\"995.0 228.0 24 24\" width=\"24\" height=\"24\" fill=\"none\" aria-hidden=\"true\"><path d=\"M1004.48 241.567H1008.7V239.995H1004.48V241.567Z\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"currentColor\" />\n<path d=\"M1004.48 237.992H1011.44V236.42H1004.48V237.992Z\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"currentColor\" />\n<path d=\"M999.355 247.132H999.602C1000.03 247.132 1000.38 246.78 1000.38 246.349V245.08H998.572V246.349C998.572 246.78 998.923 247.132 999.355 247.132M1001.82 247.132H1013.03C1013.46 247.132 1013.81 246.78 1013.81 246.349V233.572H1001.96V246.349C1001.96 246.623 1001.91 246.887 1001.82 247.132M1013.03 248.704H999.355C998.056 248.704 997 247.648 997 246.349V244.294C997 243.861 997.352 243.508 997.786 243.508H1000.38V232.786C1000.38 232.352 1000.74 232 1001.17 232H1014.6C1015.03 232 1015.38 232.352 1015.38 232.786V246.349C1015.38 247.648 1014.33 248.704 1013.03 248.704\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"currentColor\" />\n</svg>", "광고자산 관리": "<svg class=\"ic\" viewBox=\"995.0 100.0 24 24\" width=\"24\" height=\"24\" fill=\"none\" aria-hidden=\"true\"><path d=\"M999.955 108.256L1006.98 111.437L1014.05 108.254L1007.03 104.892L999.955 108.256ZM1007 112.943C1006.78 112.943 1006.56 112.896 1006.36 112.803L998.8 109.379C998.361 109.18 998.085 108.757 998.08 108.276C998.075 107.794 998.341 107.364 998.776 107.155L1006.33 103.54C1006.75 103.334 1007.25 103.333 1007.68 103.54L1015.23 107.155C1015.66 107.364 1015.93 107.793 1015.92 108.276C1015.92 108.757 1015.64 109.18 1015.2 109.379L1007.65 112.803C1007.44 112.896 1007.22 112.943 1007 112.943V112.943Z\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"currentColor\" />\n<path d=\"M1007 116.824C1006.78 116.824 1006.56 116.777 1006.36 116.684L998.799 113.261C998.422 113.09 998.255 112.645 998.426 112.268C998.597 111.891 999.04 111.724 999.418 111.894L1006.98 115.318L1014.58 111.894C1014.96 111.723 1015.4 111.891 1015.57 112.268C1015.75 112.645 1015.58 113.09 1015.2 113.261L1007.65 116.684C1007.44 116.777 1007.22 116.824 1007 116.824\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"currentColor\" />\n<path d=\"M1007 120.62C1006.78 120.62 1006.56 120.573 1006.36 120.48L998.799 117.057C998.422 116.886 998.255 116.441 998.426 116.064C998.597 115.686 999.04 115.519 999.418 115.69L1006.98 119.114L1014.58 115.69C1014.96 115.518 1015.4 115.686 1015.57 116.064C1015.75 116.441 1015.58 116.886 1015.2 117.057L1007.65 120.48C1007.44 120.573 1007.22 120.62 1007 120.62\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"currentColor\" />\n</svg>", "타겟 관리": "<svg class=\"ic\" viewBox=\"181.0 228.0 24 24\" width=\"24\" height=\"24\" fill=\"none\" aria-hidden=\"true\"><path d=\"M194.309 240.349C194.309 241.246 193.582 241.973 192.685 241.973C191.788 241.973 191.061 241.246 191.061 240.349C191.061 239.453 191.788 238.725 192.685 238.725C193.582 238.725 194.309 239.453 194.309 240.349\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"currentColor\" />\n<path d=\"M192.685 234.164C189.274 234.164 186.499 236.939 186.499 240.35C186.499 243.761 189.274 246.536 192.685 246.536C196.096 246.536 198.871 243.761 198.871 240.35C198.871 236.939 196.096 234.164 192.685 234.164M192.685 248.036C188.447 248.036 184.999 244.588 184.999 240.35C184.999 236.112 188.447 232.664 192.685 232.664C196.923 232.664 200.371 236.112 200.371 240.35C200.371 244.588 196.923 248.036 192.685 248.036\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"currentColor\" />\n<mask id=\"mask18_444_2567\" style=\"mask-type:luminance\" maskUnits=\"userSpaceOnUse\" x=\"182\" y=\"230\" width=\"22\" height=\"21\">\n<path d=\"M182 250.84H203.01V230H182V250.84Z\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"white\" />\n</mask>\n<g mask=\"url(#mask18_444_2567)\">\n<path d=\"M191.935 233.448H193.435V230H191.935V233.448Z\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"currentColor\" />\n<path d=\"M191.935 250.84H193.435V247.377H191.935V250.84Z\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"currentColor\" />\n<path d=\"M199.744 241.123H203.01V239.623H199.744V241.123Z\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"currentColor\" />\n<path d=\"M182 241.124H185.672V239.624H182V241.124Z\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"currentColor\" />\n</g>\n</svg>", "설정": "<svg class=\"ic\" viewBox=\"255.0 228.0 24 24\" width=\"24\" height=\"24\" fill=\"none\" aria-hidden=\"true\"><path d=\"M266.999 237.822C265.798 237.822 264.821 238.8 264.821 240.001C264.821 241.202 265.798 242.179 266.999 242.179C268.2 242.179 269.177 241.202 269.177 240.001C269.177 238.8 268.2 237.822 266.999 237.822M266.999 243.679C264.971 243.679 263.321 242.029 263.321 240.001C263.321 237.972 264.971 236.322 266.999 236.322C269.027 236.322 270.677 237.972 270.677 240.001C270.677 242.029 269.027 243.679 266.999 243.679\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"currentColor\" />\n<path d=\"M265.43 247.397C266.46 247.597 267.536 247.597 268.566 247.397L269.009 246.272C269.118 245.999 269.336 245.777 269.608 245.664C270.038 245.482 270.452 245.251 270.834 244.979C271.073 244.811 271.356 244.742 271.64 244.789L272.906 244.986C273.586 244.247 274.117 243.368 274.453 242.421L273.674 241.503C273.48 241.274 273.387 240.969 273.421 240.666C273.446 240.444 273.459 240.223 273.46 240.001C273.459 239.779 273.446 239.558 273.421 239.337C273.387 239.033 273.48 238.727 273.675 238.497L274.453 237.58C274.116 236.632 273.587 235.753 272.906 235.015L271.639 235.213C271.357 235.257 271.073 235.19 270.838 235.024C270.453 234.751 270.039 234.52 269.605 234.337C269.331 234.221 269.12 234.006 269.011 233.732L268.566 232.604C267.537 232.405 266.461 232.405 265.431 232.604L264.987 233.729C264.881 234.001 264.663 234.223 264.389 234.337C263.961 234.519 263.547 234.75 263.162 235.022C262.924 235.19 262.638 235.258 262.357 235.212L261.09 235.015C260.41 235.754 259.88 236.634 259.544 237.58L260.323 238.499C260.519 238.73 260.611 239.035 260.575 239.337C260.525 239.777 260.525 240.224 260.575 240.665C260.611 240.966 260.519 241.271 260.324 241.501L259.544 242.421C259.881 243.369 260.411 244.248 261.09 244.986L262.358 244.788C262.642 244.745 262.924 244.812 263.159 244.977C263.545 245.251 263.958 245.482 264.392 245.665C264.662 245.778 264.88 246 264.987 246.275L265.43 247.397ZM266.998 249.046C266.296 249.046 265.593 248.971 264.91 248.821C264.544 248.741 264.245 248.484 264.109 248.135L263.653 246.979C263.224 246.787 262.814 246.558 262.428 246.296L261.125 246.499C260.766 246.556 260.402 246.433 260.151 246.175C259.195 245.193 258.468 243.984 258.048 242.68C257.93 242.318 258.011 241.91 258.26 241.616L259.068 240.664C259.027 240.223 259.027 239.778 259.067 239.337L258.26 238.386C258.011 238.092 257.93 237.683 258.049 237.319C258.468 236.017 259.195 234.808 260.151 233.826C260.402 233.568 260.768 233.448 261.124 233.502L262.429 233.705C262.816 233.443 263.226 233.213 263.653 233.022L264.111 231.864C264.246 231.517 264.545 231.261 264.909 231.18C266.277 230.881 267.721 230.88 269.087 231.18C269.45 231.26 269.749 231.516 269.887 231.864L270.344 233.022C270.771 233.214 271.182 233.443 271.569 233.705L272.872 233.502C273.235 233.448 273.595 233.567 273.846 233.826C274.801 234.809 275.528 236.017 275.949 237.322C276.067 237.683 275.986 238.091 275.736 238.386L274.929 239.338C274.949 239.557 274.959 239.778 274.96 239.999V240.002C274.959 240.223 274.949 240.443 274.929 240.663L275.736 241.616C275.986 241.91 276.067 242.319 275.948 242.683C275.528 243.984 274.801 245.193 273.845 246.176C273.595 246.433 273.23 246.553 272.873 246.499L271.569 246.296C271.183 246.558 270.771 246.787 270.343 246.979L269.886 248.138C269.749 248.486 269.45 248.741 269.087 248.821C268.403 248.971 267.701 249.046 266.998 249.046V249.046Z\" fill-rule=\"evenodd\" clip-rule=\"evenodd\" fill=\"currentColor\" />\n</svg>", "모먼트 AI": "<svg class=\"ic\" viewBox=\"7 14 24 24\" width=\"24\" height=\"24\" fill=\"none\" aria-hidden=\"true\"><path d=\"M11.9915 33.8717L25.9915 33.9914C26.5471 33.9961 27 33.547 27 32.9914V19.0086C27 18.453 26.5471 18.0039 25.9915 18.0086L11.9915 18.1283C11.4425 18.133 11 18.5793 11 19.1282V32.8718C11 33.4207 11.4425 33.867 11.9915 33.8717Z\" stroke-width=\"1.5\" stroke=\"currentColor\"/><rect x=\"14.75\" y=\"27\" width=\"1.5\" height=\"3\" fill=\"currentColor\"/><rect x=\"18.25\" y=\"25\" width=\"1.5\" height=\"5\" fill=\"currentColor\"/><rect x=\"21.75\" y=\"22\" width=\"1.5\" height=\"8\" fill=\"currentColor\"/></svg>"};
+const LNB_MENUS = {
+  '디스플레이': [
+    ['대시보드'], ['광고 만들기'], ['보고서'], ['변경이력'],
+    ['광고자산 관리', ['애드뷰 관리','비즈니스폼+ 관리','비즈니스폼 연동 관리','픽셀 & SDK 연동 관리','카카오쇼핑 연동 관리']],
+    ['타겟 관리', ['오디언스 관리','광고반응타겟 관리','고객파일 관리','친구그룹 관리']],
+    ['설정', ['광고계정 관리','심사서류 관리','비즈월렛 관리','변경이력 관리']],
+    ['모먼트 AI']
+  ],
+  '메시지': [
+    ['대시보드'], ['광고 만들기'], ['보고서'], ['변경이력'],
+    ['광고자산 관리', ['메시지 관리','애드뷰 관리','비즈니스폼+ 관리','비즈니스폼 연동 관리','픽셀 & SDK 연동 관리']],
+    ['타겟 관리', ['오디언스 관리','광고반응타겟 관리','고객파일 관리','친구그룹 관리']],
+    ['설정', ['광고계정 관리','심사서류 관리','비즈월렛 관리']],
+    ['모먼트 AI']
+  ],
+  '비즈맥스 캠페인': [
+    ['대시보드'], ['광고 만들기'],
+    ['보고서', ['맞춤 보고서','상품별 보고서','SKAN 보고서']],
+    ['변경이력'],
+    ['광고자산 관리', ['비즈니스폼+ 관리','픽셀 & SDK 연동 관리']],
+    ['설정', ['광고계정 관리','심사서류 관리','비즈월렛 관리','다운로드 센터']],
+    ['모먼트 AI']
+  ]
+};
+const esc = t => t.replace(/&/g,'&amp;').replace(/</g,'&lt;');
+// 광고 유형별 사용자 액션 기억: { [유형]: { open: [1뎁스 라벨...], sel: '라벨' | '상위>하위' } }
+// 같은 세션에서는 메모리로 유지하고, 가능한 환경이면 새로고침 후에도 복원합니다.
+const LNB_STATE_KEY = 'lnbStateByType';
+const lnbState = (() => { try { return JSON.parse(localStorage.getItem(LNB_STATE_KEY)) || {}; } catch (e) { return {}; } })();
+function saveLnbState() { try { localStorage.setItem(LNB_STATE_KEY, JSON.stringify(lnbState)); } catch (e) {} }
+function stateOf(type) {
+  if (!lnbState[type]) lnbState[type] = { open: [], sel: (LNB_MENUS[type] || LNB_MENUS['디스플레이'])[0][0] };
+  return lnbState[type];
+}
+function renderLnb(type) {
+  const nav = document.getElementById('lnbNav');
+  const ext = '<span class="ext-ic"><svg width="9" height="9" viewBox="150.5 21.5 9 9" fill="none" aria-hidden="true"><path d="M158.771 28.8291L158.771 22.2295L152.172 22.2295" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" stroke="currentColor"/><path d="M158.3 22.7012L151.229 29.7722" stroke-width="1.4" stroke-linecap="round" stroke="currentColor"/></svg></span>';
+  const st = stateOf(type);
+  nav.innerHTML = (LNB_MENUS[type] || LNB_MENUS['디스플레이']).map(([label, subs]) => {
+    const icon = LNB_ICONS[label] || '';
+    if (!subs) return `<a href="#" data-key="${esc(label)}"${st.sel === label ? ' class="on"' : ''}>${icon}${esc(label)}${label === '모먼트 AI' ? ' ' + ext : ''}</a>`;
+    const open = st.open.includes(label);
+    const hasOn = subs.some(t => st.sel === label + '>' + t);
+    return `<div class="grp${open ? ' open' : ''}${hasOn ? ' has-on' : ''}" data-key="${esc(label)}"><a href="#" class="parent" aria-expanded="${open}">${icon}${esc(label)}<span class="chev"></span></a>`
+         + `<div class="sub">${subs.map(t => `<a href="#" data-key="${esc(label + '>' + t)}"${st.sel === label + '>' + t ? ' class="on"' : ''}>${esc(t)}</a>`).join('')}</div></div>`;
+  }).join('');
+}
+// 마지막으로 보던 광고 유형 복원
+(() => {
+  let t = null; try { t = localStorage.getItem('lnbAdType'); } catch (e) {}
+  setAdType(AD_TYPES.includes(t) ? t : AD_TYPES[0]);
+})();
+document.getElementById('lnbNav').addEventListener('click', e => {
+  const a = e.target.closest('a'); if (!a) return;
+  e.preventDefault();
+  const st = stateOf(adType);
+  // 1뎁스 부모: 클릭할 때마다 펼침/접힘 토글
+  if (a.classList.contains('parent')) {
+    const g = a.parentElement;
+    const open = g.classList.toggle('open');
+    a.setAttribute('aria-expanded', String(open));
+    st.open = st.open.filter(k => k !== g.dataset.key);
+    if (open) st.open.push(g.dataset.key);
+    saveLnbState();
+    return;
+  }
+  // 일반 메뉴 또는 2뎁스: 선택
+  document.querySelectorAll('#lnbNav a').forEach(x => x.classList.remove('on'));
+  document.querySelectorAll('#lnbNav .grp').forEach(g => g.classList.remove('has-on'));
+  a.classList.add('on');
+  const g = a.closest('.grp');
+  if (g) g.classList.add('has-on');
+  st.sel = a.dataset.key;
+  saveLnbState();
+});
+// 진입 시(페이지 로드·시안 전환) 화면상 첫 번째 메뉴를 선택 상태로
+// C-2는 '광고 만들기'가 최상단에 노출되므로 그 메뉴가 첫 번째
+function firstMenuKey(type) {
+  const menus = LNB_MENUS[type] || LNB_MENUS['디스플레이'];
+  if (document.body.dataset.variant === 'C-2' && menus.some(([l]) => l === '광고 만들기')) return '광고 만들기';
+  return menus[0][0];
+}
+window.addEventListener('variantchange', () => {
+  AD_TYPES.forEach(t => { stateOf(t).sel = firstMenuKey(t); });
+  saveLnbState();
+  renderLnb(adType);
+});
+// 프로필 이름 → 미리보기 반영 + 필수 항목 진행도
+function updateProgress() {
+  const filled = [...document.querySelectorAll('#urlBox textarea, #profileName')].filter(e => e.value.trim()).length;
+  document.getElementById('reqNum').textContent = filled + '/21';
+  document.getElementById('reqBar').style.width = (filled / 21 * 100) + '%';
+  const n = document.getElementById('profileName').value.trim();
+  const pv = document.getElementById('pvName');
+  pv.textContent = n || '설명 문구';
+  pv.style.color = n ? '#222' : '';
+}
+
+// ===================== 시안 스위처 =====================
+// 새 시안은 이 배열에 추가하고, CSS는 body[data-variant="ID"] 로 작성합니다.
+// 시안별 JS가 필요하면 onEnter / onLeave 를 사용합니다.
+const VARIANTS = [
+  { id: 'A-1', desc: '기준 목업' },
+  { id: 'A-2', desc: '드롭다운 강조 · 메뉴 볼드 제거' },
+  { id: 'B-1', desc: '라인 버튼 · 블루 드롭다운' },
+  { id: 'B-2', desc: 'B-1 + 상단 버튼 진한 보더' },
+  { id: 'C-1', desc: '블루 채움 드롭다운 · 메뉴 볼드 제거' },
+  { id: 'C-2', desc: '하늘색 버튼 · 광고 만들기 최상단' },
+  { id: 'D-1', desc: '광고 유형 좌우 네비게이션' },
+  { id: 'D-2', desc: '좌우 네비게이션 · 박스 화살표 + 구분선' },
+  { id: 'D-3', desc: 'D-2 + 회색 버튼 · 블루 유형 텍스트' },
+];
+(() => {
+  const box = document.getElementById('variantSwitcher');
+  const list = box.querySelector('.vs-list');
+  const desc = box.querySelector('.vs-desc');
+  const cur = box.querySelector('.vs-cur');
+  const [prev, next] = box.querySelectorAll('.vs-nav');
+  let idx = -1;
+  list.innerHTML = VARIANTS.map((v, i) => `<button type="button" class="vs-chip" data-i="${i}">${v.id}</button>`).join('');
+  function go(i) {
+    i = Math.max(0, Math.min(VARIANTS.length - 1, i));
+    if (i === idx) return;
+    if (idx >= 0 && VARIANTS[idx].onLeave) VARIANTS[idx].onLeave();
+    idx = i;
+    const v = VARIANTS[i];
+    document.body.dataset.variant = v.id;
+    document.title = `[${v.id}] 소재 만들기 - kakao business 모먼트관리자센터`;
+    try { history.replaceState(null, '', '#' + v.id); } catch (e) { location.hash = v.id; }
+    list.querySelectorAll('.vs-chip').forEach((c, j) => c.classList.toggle('on', j === i));
+    desc.textContent = v.desc || '';
+    cur.textContent = v.id;
+    prev.disabled = i === 0;
+    next.disabled = i === VARIANTS.length - 1;
+    if (v.onEnter) v.onEnter();
+    window.dispatchEvent(new CustomEvent('variantchange', { detail: v.id }));
+  }
+  list.addEventListener('click', e => { const c = e.target.closest('.vs-chip'); if (c) go(+c.dataset.i); });
+  [prev, next].forEach(b => b.addEventListener('click', () => go(idx + +b.dataset.dir)));
+  box.querySelector('.vs-hide').addEventListener('click', () => {
+    const min = box.classList.toggle('min');
+    box.querySelector('.vs-hide').textContent = min ? '+' : '–';
+  });
+  document.addEventListener('keydown', e => {
+    if (e.target.closest('input, textarea, select, [contenteditable]')) return;
+    if (e.key === 'ArrowLeft') go(idx - 1);
+    if (e.key === 'ArrowRight') go(idx + 1);
+  });
+  const fromHash = VARIANTS.findIndex(v => '#' + v.id === decodeURIComponent(location.hash));
+  go(fromHash >= 0 ? fromHash : 0);
+})();
+</script>
+</body>
+</html>
