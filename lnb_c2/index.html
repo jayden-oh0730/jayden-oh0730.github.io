@@ -911,6 +911,15 @@ body.dk-view .main { padding-top: 0; background: #fff; }
 .dk-more:hover { text-decoration: underline; text-underline-offset: 3px; }
 /* 전체 광고 상품 둘러보기 화면에서는 디스플레이 광고만들기 숨김 (ap-screen 클래스 공유로 함께 보이던 문제) */
 body.ap-view .main > .dk-screen { display: none !important; }
+
+/* ---------- 전체 광고 상품 둘러보기 카드 버튼 → 성과형/보장형/참여형/메시지 캠페인 만들기 (콘텐츠 1180px 고정) ---------- */
+.ld-screen { display: none; width: 1180px; margin: 0 auto; padding-top: 34px; align-self: center; }
+.ld-screen img { display: none; width: 1180px; height: auto; }
+body.ld-view .main > *:not(.ld-screen):not(.ftr):not(.ftr-gap) { display: none !important; }
+body.ld-view .ld-screen { display: block !important; }
+body.ld-view .main { padding-top: 0; background: #fff; }
+body[data-ld="perf"] .ld-screen img[data-ld="perf"], body[data-ld="guar"] .ld-screen img[data-ld="guar"],
+body[data-ld="part"] .ld-screen img[data-ld="part"], body[data-ld="msgc"] .ld-screen img[data-ld="msgc"] { display: block; }
 </style>
 </head>
 <body>
@@ -1089,6 +1098,12 @@ body.ap-view .main > .dk-screen { display: none !important; }
 <div class="ms-acts" aria-hidden="true"><span class="on"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11.2 3.8l3 3L6.5 14.5H3.5v-3l7.7-7.7z" stroke="#424242" stroke-width="1.3" stroke-linejoin="round"/></svg></span><span><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="6" y="6" width="9" height="9" rx="1" stroke="#424242" stroke-width="1.3"/><path d="M12 6V4a1 1 0 00-1-1H4a1 1 0 00-1 1v7a1 1 0 001 1h2" stroke="#424242" stroke-width="1.3"/></svg></span><span><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 5h12M7 5V3.5h4V5M4.5 5l.7 9.5h7.6l.7-9.5M7.5 8v4M10.5 8v4" stroke="#424242" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><div class="ms-rdate">발송일 설정전</div><div class="ms-rst"><span class="ms-st"><span class="ms-dot gray"></span>임시저장</span></div><div class="ms-rbtn"><button type="button" class="ms-btn sm gray">이어서 만들기</button></div></li><li class="ms-row"><span class="ms-ck" role="checkbox" aria-checked="false"></span><img class="ms-thumb" src="data:image/jpeg;base64,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" alt="">
 <div class="ms-rbody"><div class="ms-brand sm"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAACrUlEQVR42t1WwU7qQBS9Mx2ElEbGTUExSBSbEIG68mOMiYkr/oMYQ9waXOo3kMZ/EFdAWdOwEdxAW0SE2PsWY/qQVxYGunln1d6058yc2945BBEhCO12u9FoNJvNZrPZ7/c/Pj4cx3l/fweAeDy+vb0ty3IqlSqVSrqun52dFYvFQB7An3Ac5/r6+vDwEH6Jo6Ojm5sb13WXCH8I1Ov13d1dWAPpdNowjGCBu7s7SZJgbUiSVKvVlgXq9fpG2H0Nfx8gfF/TmUCvRD8AESuVCoSAarX6LZDL5cIQyOVyiAitVgtCg2ma7Pn5WdxwzrPZLCJalmXbduALiUQik8kAQK/XW3yGUhqJRABgPp97nufXG42GlMlkXl5eKKX5fP7y8vL09NSyrMFgECigadr5+XmxWOz1em9vb359a2uLcx6Lxebz+dfXl1/PZrPMNE1CCCFElKLRaDKZVFXVtu3Pz89/dyBGQiKR8KkVRYnFYoyx2WxGKd3Z2Tk4OEDEbrfbarXY6+srInqe1+12Hx8fVVVVFKVQKJimubjGVVAURdM0SZIsy3IcR3wyFxcXnuc9PDz0+30m5hciDofD4XCoqmqhUFhFZ9t2u90WF4t1z/Om0+l0Ol36W8fjMeGcj0YjvxSNRsX2V1m01GRhESHEdd3ZbEYI4ZwLiyzLopSC6H5IiEQiFEIGjcfj4bErivIfCGx8UC8ilUrRUqkUnoCu61TX9VAFwh3XnU4HEPH4+Di8A4cCwNXVVRgC5XL5O3i5rru3t7dZ9v39/fF4/De2GIaxwdjCGHt6eloOXrVabSMajLH7+/vg6GgYRjqdXtMZf+0BAqIf1WpV07TfUmuadnt7K3xfBFkV3zudjh/fB4PBZDIZjUaTyQQAZFnmnMuynEwmdV0X8f3k5CSQ5w/n8fIkiD+RCwAAAABJRU5ErkJggg==" alt="">프라다</div><a href="#" class="ms-rtit">일이삼사오육칠팔구십일이삼사오육칠팔구십일이삼사오육칠팔구십일이삼사오육칠팔구십일이삼사오육칠팔구십</a><p class="ms-ctype">와이드 이미지</p><p class="ms-stats"><span>발송수 9,000,000</span><span>열람수 9,000,000</span><span>클릭수 9,000,000</span></p></div>
 <div class="ms-acts" aria-hidden="true"><span class="on"><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M11.2 3.8l3 3L6.5 14.5H3.5v-3l7.7-7.7z" stroke="#424242" stroke-width="1.3" stroke-linejoin="round"/></svg></span><span><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><rect x="6" y="6" width="9" height="9" rx="1" stroke="#424242" stroke-width="1.3"/><path d="M12 6V4a1 1 0 00-1-1H4a1 1 0 00-1 1v7a1 1 0 001 1h2" stroke="#424242" stroke-width="1.3"/></svg></span><span><svg width="18" height="18" viewBox="0 0 18 18" fill="none"><path d="M3 5h12M7 5V3.5h4V5M4.5 5l.7 9.5h7.6l.7-9.5M7.5 8v4M10.5 8v4" stroke="#424242" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><div class="ms-rdate">2025. 01. 10. 12:34~<br>2025. 01. 31. 09:20</div><div class="ms-rst"><span class="ms-st"><span class="ms-dot gray"></span>발송종료</span></div><div class="ms-rbtn"><button type="button" class="ms-btn sm gray">보고서</button></div></li></ul>
+    </div>
+    <div class="ld-screen" id="ldScreen" aria-label="광고 만들기">
+      <img data-ld="perf" src="landing/perf.jpg" width="1180" height="861" alt="성과형 광고 만들기">
+      <img data-ld="guar" src="landing/guar.jpg" width="1180" height="850" alt="보장형 광고 만들기">
+      <img data-ld="part" src="landing/part.jpg" width="1180" height="892" alt="참여형 광고 만들기">
+      <img data-ld="msgc" src="landing/msgc.jpg" width="1180" height="843" alt="메시지 캠페인 만들기">
     </div>
     <div class="ap-screen dk-screen" id="dkScreen" aria-label="디스플레이 광고만들기">
       <div class="ap-head"><h1>광고만들기</h1><a href="#" class="ap-help"><span>!</span>도움말</a></div>
@@ -1346,6 +1361,7 @@ single('#ratioTabs', 'button');
   const setOpen = v => { wrap.classList.toggle('open', v); btn.setAttribute('aria-expanded', v); };
   btn.addEventListener('click', e => { e.stopPropagation(); setOpen(!wrap.classList.contains('open')); });
   wrap.querySelectorAll('.sel-list li').forEach(li => li.addEventListener('click', () => {
+    apOpen = false; ldOpen = null;
     setAdType(li.textContent.trim());
     setOpen(false);
   }));
@@ -1375,11 +1391,11 @@ function syncBzView() {
   cl.toggle('ms-view', ms);
   cl.toggle('dp-view', dp);
   // 비즈맥스 + '광고 만들기' 선택 시 캠페인 만들기 화면
-  const bm = !apOpen && bz && stateOf(adType).sel === '광고 만들기';
+  const bm = !apOpen && !ldOpen && bz && stateOf(adType).sel === '광고 만들기';
   if (bm !== cl.contains('bm-view')) window.scrollTo(0, 0);
   cl.toggle('bm-view', bm);
   // 메시지 + '광고 만들기' → 메시지 만들기
-  const mk = !apOpen && ms && stateOf(adType).sel === '광고 만들기';
+  const mk = !apOpen && !ldOpen && ms && stateOf(adType).sel === '광고 만들기';
   // 메시지 광고 만들기: 진입할 때마다 처음 상태(상품 유형 선택 팝업)부터 다시 시작
   if (mk && !cl.contains('mk-view')) {
     const fr = document.querySelector('#mkScreen iframe');
@@ -1388,15 +1404,21 @@ function syncBzView() {
   }
   if (mk !== cl.contains('mk-view')) window.scrollTo(0, 0);
   cl.toggle('mk-view', mk);
+  if (!mk) cl.remove('mk-modal');
   // 디스플레이 + '광고 만들기' → 디스플레이 광고만들기
-  const dk = !apOpen && dp && stateOf(adType).sel === '광고 만들기';
+  const dk = !apOpen && !ldOpen && dp && stateOf(adType).sel === '광고 만들기';
   if (dk !== cl.contains('dk-view')) window.scrollTo(0, 0);
   cl.toggle('dk-view', dk);
+  // 카드 버튼 랜딩(성과형/보장형/참여형/메시지 캠페인)
+  const ld = !apOpen && !!ldOpen;
+  if (ld !== cl.contains('ld-view') || (ld && document.body.dataset.ld !== ldOpen)) window.scrollTo(0, 0);
+  cl.toggle('ld-view', ld);
+  if (ld) document.body.dataset.ld = ldOpen; else delete document.body.dataset.ld;
   // 전체 광고 상품 둘러보기 → 광고만들기
   if (!!apOpen !== cl.contains('ap-view')) window.scrollTo(0, 0);
   cl.toggle('ap-view', !!apOpen);
 }
-var apOpen = false;
+var apOpen = false, ldOpen = null;
 window.addEventListener('variantchange', () => syncBzView());
 // 좌우 네비게이션 (D-1): 순환 이동
 document.querySelectorAll('#adTypeStep .ts-btn').forEach(b => b.addEventListener('click', () => {
@@ -1484,7 +1506,7 @@ document.getElementById('lnbNav').addEventListener('click', e => {
     return;
   }
   // 일반 메뉴 또는 2뎁스: 선택
-  apOpen = false;
+  apOpen = false; ldOpen = null;
   document.querySelectorAll('#lnbNav a').forEach(x => x.classList.remove('on'));
   document.querySelectorAll('#lnbNav .grp').forEach(g => g.classList.remove('has-on'));
   a.classList.add('on');
@@ -1659,10 +1681,19 @@ const VARIANTS = [
 
 // 전체 광고 상품 둘러보기 → 광고만들기 / 카드 버튼 → 해당 광고 유형의 광고 만들기
 (() => {
-  document.querySelector('.lnb .btn-all').addEventListener('click', () => { apOpen = true; syncBzView(); });
+  document.querySelector('.lnb .btn-all').addEventListener('click', () => { apOpen = true; ldOpen = null; syncBzView(); });
   const ap = document.getElementById('apScreen');
   ap.addEventListener('click', e => {
     const b = e.target.closest('[data-ap]');
+    const LD = { '성과형': ['디스플레이','perf'], '보장형': ['디스플레이','guar'], '참여형': ['디스플레이','part'], '메시지 캠페인': ['메시지','msgc'] };
+    const hit = b && LD[b.textContent.trim()];
+    if (hit) {
+      apOpen = false; ldOpen = null;
+      setAdType(hit[0]);
+      const st = stateOf(hit[0]); st.sel = '광고 만들기'; saveLnbState(); renderLnb(hit[0]);
+      ldOpen = hit[1]; syncBzView();
+      return;
+    }
     if (b) {
       const t = b.dataset.ap; apOpen = false;
       setAdType(t);
@@ -1675,7 +1706,7 @@ const VARIANTS = [
 
 // 메시지 만들기(iframe) 팝업 상태 수신 → LNB 딤
 window.addEventListener('message', e => {
-  if (e.data && e.data.type === 'msgModal') document.body.classList.toggle('mk-modal', !!e.data.open);
+  if (e.data && e.data.type === 'msgModal') document.body.classList.toggle('mk-modal', !!e.data.open && document.body.classList.contains('mk-view'));
 });
 
 // 디스플레이 광고만들기: 카드 → 디스플레이 캠페인 관리, 메시지 캠페인 만들기 → 메시지 광고 만들기
@@ -1684,7 +1715,7 @@ window.addEventListener('message', e => {
   root.addEventListener('click', e => {
     const go = (t, sel) => { setAdType(t); const st = stateOf(t); st.sel = sel; saveLnbState(); renderLnb(t); syncBzView(); };
     if (e.target.closest('[data-dk]')) { go('디스플레이', '대시보드'); return; }
-    if (e.target.closest('[data-dk-msg]')) { e.preventDefault(); go('메시지', '광고 만들기'); return; }
+    if (e.target.closest('[data-dk-msg]')) { e.preventDefault(); ldOpen = 'msgc'; go('메시지', '광고 만들기'); return; }
     if (e.target.closest('a[href="#"]')) e.preventDefault();
   });
 })();
